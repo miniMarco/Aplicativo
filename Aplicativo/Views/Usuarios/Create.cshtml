@@ -1,0 +1,21 @@
+﻿@model Modelo.Usuario
+
+@{
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+@Html.BeginForm()
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Novo Usuário
+        </div>
+        <div class="panel-body">
+            <div class="form-horizontal">
+                @Html.LabelFor(item => item.Nome)
+                @Html.EditorFor(item => item.Nome, new { @class="form-control"})
+                @Html.ValidationMessageFor(item => item.Nome, "")
+            </div>
+        </div>
+    </div>
+}
