@@ -1,9 +1,6 @@
 ﻿using Modelo;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Web;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace Persistencia.Contexts
 {
@@ -11,9 +8,18 @@ namespace Persistencia.Contexts
     {
         public EFContext() : base("Aplicativo_BD")
         {
-
+            Database.SetInitializer<EFContext>(new DropCreateDatabaseIfModelChanges<EFContext>());
         }
 
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Setor> Setores { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+        }
     }
+
+    
 }

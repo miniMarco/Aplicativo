@@ -94,6 +94,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Aplicativo_BD.mdf" />
+    <Content Include="App_Data\Aplicativo_BD_log.ldf">
+      <DependentUpon>Aplicativo_BD.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -368,6 +372,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SetoresController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -396,8 +401,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="Infraestrutura\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\Setores\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Modelo\Modelo.csproj">

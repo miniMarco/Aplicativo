@@ -5,17 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data.Entity;
 
 namespace Persistencia.DAL
 {
-    public class UsuarioDAL
+    public class SetorDAL
     {
         private EFContext contexto = new EFContext();
-
-        public IQueryable<Usuario> getUsuarioOrdenadoPorNome()
+        public IQueryable<Setor> listSetoresOrdenados()
         {
-            return contexto.Usuarios.Include(set => set.Setor).OrderBy(item => item.Nome);
+            return contexto.Setores.OrderBy(item => item.Nome);
         }
     }
 }
