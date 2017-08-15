@@ -15,5 +15,10 @@ namespace Servico
         {
             return usuarioDAL.getUsuarioOrdenadoPorNome();
         }
+
+        public void gravarUsuario(Usuario usuario)
+        {
+            usuarioDAL.gravarUsuario(usuario);
+        }
     }
 }

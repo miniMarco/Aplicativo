@@ -1,4 +1,5 @@
-﻿using Servico;
+﻿using Modelo;
+using Servico;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,8 +39,62 @@ namespace Aplicativo.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.Setores = new SelectList(SetorServico.listSetoresOrdenados(), "SetorId", "Nome");
+            popularDropDown();
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult Create(Usuario usuario, HttpPostedFileBase foto = null, string removerImagem = null)
+        {
+            return gravarUsuario(usuario, foto, removerImagem);
+        }
+
+        private ActionResult gravarUsuario(Usuario usuario, HttpPostedFileBase foto, string removerImagem)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (!string.IsNullOrEmpty(removerImagem))
+                    {
+                        usuario.Foto = null;
+                    }
+                    if (foto != null)
+                    {
+                        usuario.FotoMimeType = foto.ContentType;
+                        usuario.Foto = setFoto(foto);
+                    }
+
+                    usuarioServico.gravarUsuario(usuario);
+                    return RedirectToAction("Index");
+                }
+                popularDropDown(usuario);
+                return View(usuario);
+            }
+            catch
+            {
+                popularDropDown(usuario);
+                return View(usuario);
+            }
+        }
+
+        private void popularDropDown(Usuario usuario = null)
+        {
+            if (usuario == null)
+            {
+                ViewBag.Setores = new SelectList(SetorServico.listSetoresOrdenados(), "SetorId", "Nome");
+            }
+            else
+            {
+                ViewBag.Setores = new SelectList(SetorServico.listSetoresOrdenados(), "SetorId", "Nome", usuario.Setor.SetorId);
+            }
+        }
+
+        private byte[] setFoto(HttpPostedFileBase foto)
+        {
+            var bytesFoto = new byte[foto.ContentLength];
+            foto.InputStream.Read(bytesFoto, 0, foto.ContentLength);
+            return bytesFoto;
         }
     }
 }

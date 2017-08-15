@@ -4,14 +4,14 @@
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create", "Usuarios", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div class="panel panel-primary">
         <div class="panel-heading">
             Novo Usuário
         </div>
         <div class="panel-body">
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <div class="form-horizontal">
                     <div class="form-group">
                         @Html.LabelFor(item => item.Nome, htmlAttributes: new { @class = "control-label col-md-3" })
@@ -43,27 +43,29 @@
                     <div class="form-group">
                         @Html.LabelFor(item => item.Email, htmlAttributes: new { @class = "control-label col-md-3" })
                         <div class="col-md-9">
-                            @Html.Mail
                             @Html.TextBoxFor(item => item.Email, new { @class = "form-control" })
                             @Html.ValidationMessageFor(item => item.Email, "", new { @class = "text-danger" })
                         </div>
                     </div>
                 </div>
+                
                 <div class="form-horizontal">
-                    <div class="form-group">
-                        @Html.LabelFor(item => item.Aniversario, htmlAttributes: new { @class = "control-label col-md-3" })
-                        <div class="col-md-9">
-                            @Html.TextBoxFor(item => item.Aniversario, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(item => item.Aniversario, "", new { @class = "text-danger" })
+                    <div class="row col-md-8">
+                        <div class="form-group">
+                            @Html.LabelFor(item => item.Aniversario, htmlAttributes: new { @class = "control-label col-md-5" })
+                            <div class="col-md-6">
+                                @Html.TextBoxFor(item => item.Aniversario, new { @class = "form-control", id = "datepicker" })
+                                @Html.ValidationMessageFor(item => item.Aniversario, "", new { @class = "text-danger" })
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        @Html.LabelFor(item => item.Sexo, htmlAttributes: new { @class = "control-label col-md-3" })
-                        <div class="col-md-9">
-                            @Html.TextBoxFor(item => item.Sexo, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(item => item.Sexo, "", new { @class = "text-danger" })
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(item => item.Sexo, htmlAttributes: new { @class = "control-label col-md-3 col-md-offset-2" })
+                            <div class="col-md-6 col-md-offset-1">
+                                @Html.TextBoxFor(item => item.Sexo, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(item => item.Sexo, "", new { @class = "text-danger" })
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -77,8 +79,14 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-
+            <div class="col-md-5">
+                <div class="form-group">
+                    <div id="upload_foto" style="width:270px; height:300px; border: 10px solid; border-color:lightblue; 
+                        border-radius:0.5em; box-shadow: black 0.5em 0.5em 0.3em;"></div>
+                    <br />
+                    <input type="file" name="foto_perfil" id="foto_perfil" onchange="readURL(this)"/>
+                    
+                </div>
             </div>
         </div>
         <div class="panel-footer panel-info">
@@ -91,4 +99,36 @@
             <br />
         </div>
     </div>
+}
+@section styles
+{
+    <link href="~/Scripts/jquery-ui-1.12.1/jquery-ui.css" rel="stylesheet"/>    
+}
+
+@section scriptPage
+{
+    <script src="~/Scripts/jquery-ui-1.12.1/jquery-ui.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1/datepicker-pt-BR.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('li').removeClass("active");
+            $('#liUsuarios').addClass("active");
+            $("#datepicker").datepicker();
+        });
+
+
+        function readURL(input) {
+            if (input.files && input.files.length > 0) {
+                for (var i = 0; i < input.files.length; i++) {
+                    var reader = new FileReader();
+                    $('#upload_foto').empty();
+                    reader.onload = function (e) {
+                        $('#upload_foto').attr('src', e.target.result);
+                        $('#upload_foto').append($('<img>', { src: e.target.result, width: "auto", height: "auto" }));
+                    }
+                    reader.readAsDataURL(input.files[i]);
+                }
+            }
+        }
+    </script>
 }
