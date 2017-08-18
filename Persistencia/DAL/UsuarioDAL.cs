@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using System.Net;
 
 namespace Persistencia.DAL
 {
@@ -26,6 +27,11 @@ namespace Persistencia.DAL
                 contexto.Entry(usuario).State = EntityState.Modified;
 
             contexto.SaveChanges();
+        }
+
+        public Usuario getUsuarioPorId(int usuarioId)
+        {
+            return contexto.Usuarios.Find(usuarioId);
         }
     }
 }

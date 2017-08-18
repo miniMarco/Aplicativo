@@ -6,9 +6,8 @@ using System.Web.Mvc;
 
 namespace Aplicativo.Controllers
 {
-    public class HomeController : Controller
+    public class EventosController : Controller
     {
-        // GET: Home
         public ActionResult Index()
         {
             return View();

@@ -23,21 +23,29 @@
                         <th>Aniversário</th>
                         <th>Email</th>
                         <th>Foto?</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        @foreach (var usuario in Model)
-                        {
+                    @foreach (var usuario in Model)
+                    {
+                        <tr>
                             <td>@usuario.Nome</td>
                             <td>@usuario.Sobrenome</td>
                             <td>@usuario.Aniversario</td>
                             <td>@usuario.Email</td>
 
-                            if (usuario.Foto == null) { <td> Não </td> }
-                            else { <td>Sim</td> }
-                        }
-                    </tr>
+                            @if (usuario.Foto == null) 
+                            { 
+                                <td> Não </td> 
+                            }
+                            else 
+                            { 
+                                <td>Sim</td> 
+                            }
+                            <td>@Html.ActionLink("Editar","Edit", new { id = usuario.UsuarioId})</td>
+                        </tr>
+                    }   
                 </tbody>
             </table>
         }

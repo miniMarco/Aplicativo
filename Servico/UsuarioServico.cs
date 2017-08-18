@@ -20,5 +20,10 @@ namespace Servico
         {
             usuarioDAL.gravarUsuario(usuario);
         }
+
+        public Usuario getUsuarioPorId(int usuarioId)
+        {
+            return usuarioDAL.getUsuarioPorId(usuarioId);
+        }
     }
 }

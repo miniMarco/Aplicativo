@@ -3,6 +3,7 @@ using Servico;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -44,28 +45,36 @@ namespace Aplicativo.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Usuario usuario, HttpPostedFileBase foto = null, string removerImagem = null)
+        public ActionResult Create(Usuario usuario, HttpPostedFileBase foto_perfil = null)
         {
-            return gravarUsuario(usuario, foto, removerImagem);
+            return gravarUsuario(usuario, foto_perfil);
         }
 
-        private ActionResult gravarUsuario(Usuario usuario, HttpPostedFileBase foto, string removerImagem)
+        public ActionResult Edit(int id)
+        {
+            popularDropDown(UsuarioServico.getUsuarioPorId(id));
+            return getViewUsuario(id);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Usuario usuario, HttpPostedFileBase foto_perfil = null)
+        {
+            return gravarUsuario(usuario,foto_perfil);
+        }
+
+        private ActionResult gravarUsuario(Usuario usuario, HttpPostedFileBase foto_perfil)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (!string.IsNullOrEmpty(removerImagem))
+                    if (foto_perfil != null)
                     {
-                        usuario.Foto = null;
-                    }
-                    if (foto != null)
-                    {
-                        usuario.FotoMimeType = foto.ContentType;
-                        usuario.Foto = setFoto(foto);
+                        usuario.FotoMimeType = foto_perfil.ContentType;
+                        usuario.Foto = setFoto(foto_perfil);
                     }
 
-                    usuarioServico.gravarUsuario(usuario);
+                    UsuarioServico.gravarUsuario(usuario);
                     return RedirectToAction("Index");
                 }
                 popularDropDown(usuario);
@@ -80,13 +89,13 @@ namespace Aplicativo.Controllers
 
         private void popularDropDown(Usuario usuario = null)
         {
-            if (usuario == null)
+            if (usuario == null || usuario.UsuarioId == null)
             {
-                ViewBag.Setores = new SelectList(SetorServico.listSetoresOrdenados(), "SetorId", "Nome");
+                ViewBag.SetorId = new SelectList(SetorServico.listSetoresOrdenados(), "SetorId", "Nome");
             }
             else
             {
-                ViewBag.Setores = new SelectList(SetorServico.listSetoresOrdenados(), "SetorId", "Nome", usuario.Setor.SetorId);
+                ViewBag.SetorId = new SelectList(SetorServico.listSetoresOrdenados(), "SetorId", "Nome", usuario.SetorId);
             }
         }
 
@@ -95,6 +104,27 @@ namespace Aplicativo.Controllers
             var bytesFoto = new byte[foto.ContentLength];
             foto.InputStream.Read(bytesFoto, 0, foto.ContentLength);
             return bytesFoto;
+        }
+
+        private ActionResult getViewUsuario(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            Usuario usuario = UsuarioServico.getUsuarioPorId(id.Value);
+            if (usuario == null)
+                return HttpNotFound();
+
+            return View(usuario);
+        }
+
+        public FileContentResult getFoto(int id)
+        {
+            Usuario usuario = UsuarioServico.getUsuarioPorId(id);
+            if (usuario != null)
+            {
+                return File(usuario.Foto, usuario.FotoMimeType);
+            }
+            return null;
         }
     }
 }

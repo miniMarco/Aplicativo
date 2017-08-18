@@ -4,10 +4,11 @@
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 
-
-
-@using (Html.BeginForm("Create", "Usuarios", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Edit", "Usuarios", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
+    @Html.HiddenFor(usuario => usuario.UsuarioId);
+    @Html.HiddenFor(usuario => usuario.Senha);
+
     <div class="panel panel-primary">
         <div class="panel-heading">
             Novo Usuário
@@ -36,7 +37,7 @@
                     <div class="form-group">
                         @Html.LabelFor(item => item.Setor.SetorId, htmlAttributes: new { @class = "control-label col-md-3" })
                         <div class="col-md-9">
-                            @Html.DropDownList("SetorId", null, string.Empty,htmlAttributes: new { @class = "form-control" })
+                            @Html.DropDownList("SetorId", null, string.Empty, htmlAttributes: new { @class = "form-control" })
                             @Html.ValidationMessageFor(item => item.SetorId, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -50,7 +51,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="row form-horizontal">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -87,10 +88,17 @@
                     <div id="upload_foto" style="width:270px; height:300px; border: 10px solid; border-color:lightblue;
                         border-radius:0.5em; box-shadow: black 0.5em 0.5em 0.3em;">
                         <img src="" id="img" />
+                        @if (Model.Foto == null)
+                        {
+                            <img src="" id="img" />
+                        }
+                        else
+                        {
+                            <img id="img" class="max" src="@Url.Action("getFoto", "Usuarios", new { id = Model.UsuarioId})" />
+                        }
                     </div>
                     <br />
-                    <input type="file" name="foto_perfil" id="foto_perfil" onchange="readURL(this)"/>
-                    
+                    <input type="file" name="foto_perfil" id="foto_perfil" onchange="readURL(this)" />
                 </div>
             </div>
         </div>
@@ -98,7 +106,7 @@
             <div class="col-md-offset-9 col-md-3">
                 <input type="submit" value="Salvar" class="btn btn-success btn-sm" />
                 @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default btn-sm" })
-                
+
             </div>
             <br />
             <br />
@@ -107,15 +115,15 @@
 }
 @section styles
 {
-    <link href="~/Scripts/jquery-ui-1.12.1/jquery-ui.css" rel="stylesheet"/>   
+    <link href="~/Scripts/jquery-ui-1.12.1/jquery-ui.css" rel="stylesheet" />
     <style>
         .max {
-        max-width:234px;
-        max-height:280px;
+            max-width: 234px;
+            max-height: 280px;
         }
 
         .SemAno .ui-datepicker-year {
-            display: none;
+            display:none;
         }
     </style>
 }
@@ -132,26 +140,23 @@
             $('#liUsuarios').addClass("active");
             $("#datepicker").datepicker(
             {
-                beforeShow: function (input, inst) { inst.dpDiv.addClass('SemAno') },
-                onClose: function (dateText, inst) { inst.dpDiv.removeClass('SemAno') },
+                beforeShow: function (input, inst) { inst.dpDiv.addClass('SemAno')},
+                onClose: function (dateText, inst) { inst.dpDiv.removeClass('SemAno')},
                 changeYear: false, dateFormat: 'dd/mm'
             });
         });
-        
+
         function readURL(input) {
+            
             if (input.files && input.files.length > 0)
             {
                 var reader = new FileReader();
-                    
                 reader.onload = function (e) {
                     $('#img').attr('src', e.target.result);
                     $('#img').attr('class', "max");
-                    
                 }
                 reader.readAsDataURL(input.files[0]);
             }
         }
     </script>
 }
-
-
