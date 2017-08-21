@@ -13,7 +13,7 @@ namespace Servico
         UsuarioDAL usuarioDAL = new UsuarioDAL(); 
         public IQueryable<Usuario> getUsuariosOrdenadosPorNome()
         {
-            return usuarioDAL.getUsuarioOrdenadoPorNome();
+            return usuarioDAL.listUsuarioOrdenadoPorNome();
         }
 
         public void gravarUsuario(Usuario usuario)

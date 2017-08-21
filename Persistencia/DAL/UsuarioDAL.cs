@@ -14,7 +14,7 @@ namespace Persistencia.DAL
     {
         private EFContext contexto = new EFContext();
 
-        public IQueryable<Usuario> getUsuarioOrdenadoPorNome()
+        public IQueryable<Usuario> listUsuarioOrdenadoPorNome()
         {
             return contexto.Usuarios.Include(set => set.Setor).OrderBy(item => item.Nome);
         }

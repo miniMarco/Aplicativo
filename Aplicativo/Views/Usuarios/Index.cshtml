@@ -32,7 +32,7 @@
                         <tr>
                             <td>@usuario.Nome</td>
                             <td>@usuario.Sobrenome</td>
-                            <td>@usuario.Aniversario</td>
+                            <td>@usuario.Aniversario.Date.ToString("dd/MM")</td>
                             <td>@usuario.Email</td>
 
                             @if (usuario.Foto == null) 
